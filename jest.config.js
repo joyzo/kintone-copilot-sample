@@ -7,15 +7,18 @@ module.exports = {
     "src/**/*.ts",
     "!src/**/*.d.ts",
     "!src/**/*.test.ts",
-    "!src/**/*.spec.ts",:0
+    "!src/**/*.spec.ts",
   ],
   setupFilesAfterEnv: ["<rootDir>/test/setupTests.ts"],
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1"
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
   transform: {
-    "^.+\\.ts$": ["ts-jest", {
-      tsconfig: "tsconfig.test.json"
-    }]
-  }
+    "^.+\\.ts$": [
+      "ts-jest",
+      {
+        tsconfig: "tsconfig.test.json",
+      },
+    ],
+  },
 };
