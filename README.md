@@ -46,6 +46,52 @@ const records = await kintoneService.getRecords('1');
 await kintoneService.deleteRecord('1', createResult.id);
 ```
 
+### CSVエクスポート機能
+
+```typescript
+import { CsvExporter, exportKintoneToCsv } from './src/exportCsv';
+
+// 簡単な使用方法
+await exportKintoneToCsv(
+  kintoneService,
+  1, // アプリID
+  './exports/data.csv'
+);
+
+// 詳細オプション付き
+await exportKintoneToCsv(
+  kintoneService,
+  1,
+  './exports/filtered_data.csv',
+  {
+    fields: ['title', 'description', 'status'], // 特定フィールドのみ
+    includeHeader: true,
+    delimiter: ',',
+    encoding: 'utf8'
+  },
+  'status = "完了"' // 条件指定
+);
+
+// CsvExporterクラスを直接使用
+const exporter = new CsvExporter(kintoneService);
+
+// TSVファイルとして出力
+await exporter.exportToCsv(1, {
+  outputPath: './exports/data.tsv',
+  delimiter: '\t',
+  includeHeader: true
+});
+
+// 複数アプリの一括エクスポート
+await exporter.exportMultipleApps([
+  { app: 1, outputPath: './exports/app1.csv' },
+  { app: 2, outputPath: './exports/app2.csv' }
+], {
+  includeHeader: true,
+  delimiter: ','
+});
+```
+
 ## 利用可能なメソッド
 
 ### `getRecord(app, id)`
@@ -63,7 +109,26 @@ await kintoneService.deleteRecord('1', createResult.id);
 ### `getRecords(app, query?, fields?, totalCount?)`
 レコード一覧を取得します。クエリ条件を指定してフィルタリングできます。
 
-## テスト
+## CSVエクスポート機能
+
+### `exportKintoneToCsv(kintoneService, app, outputPath, options?, query?)`
+Kintoneアプリからレコードを取得してCSVファイルにエクスポートします。
+
+### `CsvExporter`クラス
+より詳細な制御が必要な場合に使用するクラスです。
+
+- `exportToCsv(app, options, query?)`: 単一アプリのCSVエクスポート
+- `exportMultipleApps(apps, commonOptions)`: 複数アプリの一括エクスポート
+
+### CSVエクスポートオプション
+
+- `outputPath`: 出力ファイルパス（必須）
+- `fields`: 含めるフィールド（省略時は全フィールド）
+- `includeHeader`: ヘッダー行を含めるか（デフォルト: true）
+- `delimiter`: 区切り文字（デフォルト: カンマ）
+- `encoding`: 文字エンコーディング（デフォルト: utf8）
+
+## 実行方法
 
 ### テストの実行
 
@@ -102,7 +167,10 @@ npm run dev
 ```
 ├── src/
 │   ├── index.ts              # メインエントリーポイント
-│   └── KintoneService.ts     # Kintone APIラッパークラス
+│   ├── KintoneService.ts     # Kintone APIラッパークラス
+│   ├── exportCsv.ts          # CSVエクスポート機能
+│   └── csvExportExample.ts   # CSVエクスポートの使用例
+├── exports/                  # CSVファイル出力先ディレクトリ
 ├── test/
 │   ├── KintoneService.test.ts # ユニットテスト
 │   ├── setupTests.ts         # テストセットアップ

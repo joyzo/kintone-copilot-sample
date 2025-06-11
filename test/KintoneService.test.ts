@@ -97,11 +97,26 @@ describe("KintoneService", () => {
 
       expect(result.records).toHaveLength(2);
       expect(result.totalCount).toBe("2");
-      expect(result.records[0]).toEqual({
-        $id: { type: "NUMBER", value: "1" },
-        $revision: { type: "REVISION", value: "1" },
-        title: { type: "SINGLE_LINE_TEXT", value: "サンプルタイトル1" },
-        description: { type: "MULTI_LINE_TEXT", value: "サンプルの説明1" },
+
+      // 基本フィールドのみをテスト（モックデータに追加フィールドが含まれるため）
+      expect(result.records[0].$id).toEqual({ type: "NUMBER", value: "1" });
+      expect(result.records[0].title).toEqual({
+        type: "SINGLE_LINE_TEXT",
+        value: "サンプルタイトル1",
+      });
+      expect(result.records[0].description).toEqual({
+        type: "MULTI_LINE_TEXT",
+        value: "サンプルの説明1",
+      });
+
+      expect(result.records[1].$id).toEqual({ type: "NUMBER", value: "2" });
+      expect(result.records[1].title).toEqual({
+        type: "SINGLE_LINE_TEXT",
+        value: "サンプルタイトル2",
+      });
+      expect(result.records[1].description).toEqual({
+        type: "MULTI_LINE_TEXT",
+        value: "サンプルの説明2",
       });
     });
 

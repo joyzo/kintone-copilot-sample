@@ -1,1 +1,13 @@
 node_modules
+dist/
+coverage/
+*.log
+.DS_Store
+
+# Test output directories
+test-exports/
+integration-test-exports/
+
+# CSV export files
+exports/*.csv
+exports/*.tsv
